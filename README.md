@@ -37,7 +37,7 @@ A futuristic AI-powered news analysis tool that fetches and analyzes news articl
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/yash-prof/Neural_News_Analyzer.git
    cd Neural_News_Analyzer
    ```
 
