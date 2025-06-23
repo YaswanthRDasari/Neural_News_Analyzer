@@ -1,10 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import axios from 'axios';
 import { Search, Newspaper, TrendingUp, AlertCircle, CheckCircle, Zap, Brain, Eye, Sun, Moon, X } from 'lucide-react';
 import './App.css';
+import debounce from 'lodash.debounce';
+
+// NOTE: Run `npm install lodash.debounce` in frontend/ to ensure smooth input debouncing
+
+// Memoized SummaryCard component
+const SummaryCard = React.memo(function SummaryCard({ source, summary }) {
+  return (
+    <div className="summary-card">
+      <div className="source-header">
+        <h4 className="futuristic-text">{source}</h4>
+        <div className={`source-badge ${source.toLowerCase().replace(' ', '-')}`}>
+          {source}
+        </div>
+      </div>
+      <div className="summary-content">
+        <p className="summary-text">{summary}</p>
+      </div>
+    </div>
+  );
+});
+
+// Memoized Particle component
+const Particle = React.memo(function Particle({ particle }) {
+  return (
+    <div
+      className="particle"
+      style={{
+        left: particle.x,
+        top: particle.y,
+        width: particle.size,
+        height: particle.size,
+        opacity: particle.opacity
+      }}
+    />
+  );
+});
 
 function App() {
   const [topic, setTopic] = useState('');
+  const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
@@ -93,32 +130,41 @@ function App() {
     }
   };
 
-  // Optimized floating particles effect - much more subtle
+  // Debounced setter for topic
+  const debouncedSetTopic = useMemo(() => debounce(setTopic, 250), []);
+  const handleInputChange = useCallback((e) => {
+    setInputValue(e.target.value);
+    debouncedSetTopic(e.target.value);
+  }, [debouncedSetTopic]);
+  useEffect(() => {
+    return () => {
+      debouncedSetTopic.cancel();
+    };
+  }, [debouncedSetTopic]);
+
+  // Optimized floating particles effect - fewer particles
   useEffect(() => {
     const createParticle = () => ({
       id: Math.random(),
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 1 + 0.5, // Much smaller particles
-      speedX: (Math.random() - 0.5) * 0.2, // Very slow movement
+      size: Math.random() * 1 + 0.5,
+      speedX: (Math.random() - 0.5) * 0.2,
       speedY: (Math.random() - 0.5) * 0.2,
-      opacity: Math.random() * 0.15 + 0.05 // Much more transparent
+      opacity: Math.random() * 0.15 + 0.05
     });
-
-    const initialParticles = Array.from({ length: 8 }, createParticle); // Fewer particles
+    const initialParticles = Array.from({ length: 4 }, createParticle); // Fewer particles
     setParticles(initialParticles);
-
     const interval = setInterval(() => {
       setParticles(prev => prev.map(particle => ({
         ...particle,
         x: particle.x + particle.speedX,
         y: particle.y + particle.speedY,
-      })).filter(particle => 
+      })).filter(particle =>
         particle.x > -10 && particle.x < window.innerWidth + 10 &&
         particle.y > -10 && particle.y < window.innerHeight + 10
       ).concat(Array.from({ length: 1 }, createParticle)));
-    }, 300); // Even slower updates
-
+    }, 400); // Slower updates
     return () => clearInterval(interval);
   }, []);
 
@@ -205,17 +251,7 @@ function App() {
       {/* Very subtle floating particles background */}
       <div className="particles-container">
         {particles.map(particle => (
-          <div
-            key={particle.id}
-            className="particle"
-            style={{
-              left: particle.x,
-              top: particle.y,
-              width: particle.size,
-              height: particle.size,
-              opacity: particle.opacity
-            }}
-          />
+          <Particle key={particle.id} particle={particle} />
         ))}
       </div>
 
@@ -248,14 +284,14 @@ function App() {
                 type="text"
                 className="search-input"
                 placeholder="ENTER TOPIC FOR ANALYSIS (e.g., CLIMATE CHANGE, AI, POLITICS)"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
+                value={inputValue}
+                onChange={handleInputChange}
                 disabled={loading}
               />
               <button 
                 type="submit" 
                 className="search-button"
-                disabled={loading || !topic.trim()}
+                disabled={loading || !inputValue.trim()}
               >
                 {loading ? (
                   <>
@@ -330,17 +366,7 @@ function App() {
                 </h3>
                 <div className="summaries-grid">
                   {Object.entries(results.summaries).map(([source, summary]) => (
-                    <div key={source} className="summary-card">
-                      <div className="source-header">
-                        <h4 className="futuristic-text">{source}</h4>
-                        <div className={`source-badge ${source.toLowerCase().replace(' ', '-')}`}>
-                          {source}
-                        </div>
-                      </div>
-                      <div className="summary-content">
-                        <p className="summary-text">{summary}</p>
-                      </div>
-                    </div>
+                    <SummaryCard key={source} source={source} summary={summary} />
                   ))}
                 </div>
               </div>
