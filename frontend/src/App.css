@@ -247,6 +247,7 @@ body.light-mode .theme-icon {
   will-change: transform;
   transform: translateZ(0);
   transition: var(--theme-transition);
+  opacity: 0.12;
 }
 
 /* Light mode particle adjustments */
@@ -653,7 +654,7 @@ body.light-mode .error-suggestion {
   border: 1px solid var(--glass-border);
   border-radius: 25px;
   padding: 40px;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   position: relative;
   transition: var(--theme-transition);
 }
@@ -738,7 +739,7 @@ body.light-mode .error-suggestion {
   border-radius: 20px;
   padding: 30px;
   position: relative;
-  transition: all 0.2s ease, var(--theme-transition);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .summary-card::before {
@@ -754,9 +755,7 @@ body.light-mode .error-suggestion {
 }
 
 .summary-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  border-color: var(--neon-blue);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
 }
 
 .source-header {
