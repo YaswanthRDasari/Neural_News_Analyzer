@@ -1169,4 +1169,30 @@ body.light-mode .error-suggestion {
   50% { left: 18px; top: 72px; opacity: 1; }
   90% { opacity: 1; }
   100% { left: 18px; top: 72px; opacity: 0; }
+}
+
+.source-links {
+  margin-top: 10px;
+  font-size: 0.98rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.source-link {
+  color: var(--neon-blue);
+  text-decoration: underline;
+  margin-right: 4px;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.98rem;
+  transition: color 0.2s;
+}
+.source-link:hover {
+  color: var(--neon-purple);
+}
+.links-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: 'Rajdhani', sans-serif;
 } 
