@@ -2,6 +2,9 @@ import asyncio
 from .serpapi_fetcher import get_articles_serpapi_async
 from .generic_scraper import scrape_article_text_async
 
+def flatten_and_filter(lst):
+    return [x for x in lst if isinstance(x, str) and x.strip()]
+
 async def fetch_and_scrape_articles_async(topic, sources):
     """
     Fetch articles from multiple sources concurrently and scrape their content.
@@ -12,7 +15,7 @@ async def fetch_and_scrape_articles_async(topic, sources):
                        e.g., {"CNN": "cnn.com", "Fox News": "foxnews.com"}
     
     Returns:
-        dict: Dictionary mapping source names to lists of scraped article texts
+        dict: {source: {"articles": [scraped_texts], "links": [urls]}}
     """
     articles = {}
     
@@ -32,7 +35,7 @@ async def fetch_and_scrape_articles_async(topic, sources):
     for source, urls in source_urls.items():
         if isinstance(urls, Exception):
             print(f"Error fetching URLs for {source}: {urls}")
-            articles[source] = []
+            articles[source] = {"articles": [], "links": []}
             continue
             
         # Create tasks for scraping each URL from this source
@@ -47,12 +50,18 @@ async def fetch_and_scrape_articles_async(topic, sources):
         for source, result in zip(scrape_tasks.keys(), scrape_results):
             if isinstance(result, Exception):
                 print(f"Error scraping articles for {source}: {result}")
-                articles[source] = []
+                articles[source] = {
+                    "articles": [],
+                    "links": source_urls.get(source, [])
+                }
             else:
-                # Filter out any failed scrapes (empty strings or exceptions)
-                articles[source] = [
-                    text for text in result 
-                    if isinstance(text, str) and text.strip()
-                ]
+                articles[source] = {
+                    "articles": flatten_and_filter(result),
+                    "links": source_urls.get(source, [])
+                }
+    else:
+        for source in sources.keys():
+            if source not in articles:
+                articles[source] = {"articles": [], "links": source_urls.get(source, [])}
     
     return articles 

@@ -41,16 +41,18 @@ def analyze_news():
             "CNN": "cnn.com",
             "Fox News": "foxnews.com"
         }
-        articles = asyncio.run(fetch_and_scrape_articles_async(topic, sources))
-        summaries = summarize_articles(articles)
+        articles_data = asyncio.run(fetch_and_scrape_articles_async(topic, sources))
+        # articles_data: {source: {"articles": [...], "links": [...]}}
+        summaries = summarize_articles({k: v["articles"] for k, v in articles_data.items()})
         comparison_result = analyze_bias(summaries)
-
+        # Prepare links for frontend
+        source_links = {k: v["links"] for k, v in articles_data.items()}
         return jsonify({
             "topic": topic,
             "summaries": summaries,
-            "bias_analysis": comparison_result
+            "bias_analysis": comparison_result,
+            "source_links": source_links
         })
-
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

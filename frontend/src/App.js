@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 // NOTE: Run `npm install lodash.debounce` in frontend/ to ensure smooth input debouncing
 
 // Memoized SummaryCard component
-const SummaryCard = React.memo(function SummaryCard({ source, summary }) {
+const SummaryCard = React.memo(function SummaryCard({ source, summary, links }) {
   return (
     <div className="summary-card">
       <div className="source-header">
@@ -18,6 +18,22 @@ const SummaryCard = React.memo(function SummaryCard({ source, summary }) {
       </div>
       <div className="summary-content">
         <p className="summary-text">{summary}</p>
+        {links && links.length > 0 && (
+          <div className="source-links">
+            <span className="links-label">Sources:&nbsp;</span>
+            {links.map((url, idx) => (
+              <a
+                key={url}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="source-link"
+              >
+                [{idx + 1}]
+              </a>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -366,7 +382,12 @@ function App() {
                 </h3>
                 <div className="summaries-grid">
                   {Object.entries(results.summaries).map(([source, summary]) => (
-                    <SummaryCard key={source} source={source} summary={summary} />
+                    <SummaryCard
+                      key={source}
+                      source={source}
+                      summary={summary}
+                      links={results.source_links && results.source_links[source]}
+                    />
                   ))}
                 </div>
               </div>

@@ -1,6 +1,6 @@
-# News Digest Bot Frontend
+# Neural News Analyzer Frontend
 
-A modern React frontend for the News Digest Bot that analyzes news coverage and detects bias across different sources.
+A modern React frontend for the Neural News Analyzer that analyzes news coverage and detects bias across different sources.
 
 ## Features
 
