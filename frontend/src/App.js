@@ -39,29 +39,12 @@ const SummaryCard = React.memo(function SummaryCard({ source, summary, links }) 
   );
 });
 
-// Memoized Particle component
-const Particle = React.memo(function Particle({ particle }) {
-  return (
-    <div
-      className="particle"
-      style={{
-        left: particle.x,
-        top: particle.y,
-        width: particle.size,
-        height: particle.size,
-        opacity: particle.opacity
-      }}
-    />
-  );
-});
-
 function App() {
   const [topic, setTopic] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
-  const [particles, setParticles] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showTutorial, setShowTutorial] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
@@ -158,32 +141,6 @@ function App() {
     };
   }, [debouncedSetTopic]);
 
-  // Optimized floating particles effect - fewer particles
-  useEffect(() => {
-    const createParticle = () => ({
-      id: Math.random(),
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 1 + 0.5,
-      speedX: (Math.random() - 0.5) * 0.2,
-      speedY: (Math.random() - 0.5) * 0.2,
-      opacity: Math.random() * 0.15 + 0.05
-    });
-    const initialParticles = Array.from({ length: 4 }, createParticle); // Fewer particles
-    setParticles(initialParticles);
-    const interval = setInterval(() => {
-      setParticles(prev => prev.map(particle => ({
-        ...particle,
-        x: particle.x + particle.speedX,
-        y: particle.y + particle.speedY,
-      })).filter(particle =>
-        particle.x > -10 && particle.x < window.innerWidth + 10 &&
-        particle.y > -10 && particle.y < window.innerHeight + 10
-      ).concat(Array.from({ length: 1 }, createParticle)));
-    }, 400); // Slower updates
-    return () => clearInterval(interval);
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!topic.trim()) return;
@@ -263,13 +220,6 @@ function App() {
           {isDarkMode ? <Sun className="theme-icon" /> : <Moon className="theme-icon" />}
         </button>
       )}
-
-      {/* Very subtle floating particles background */}
-      <div className="particles-container">
-        {particles.map(particle => (
-          <Particle key={particle.id} particle={particle} />
-        ))}
-      </div>
 
       <div className="container">
         <header className="header">
