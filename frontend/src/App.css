@@ -226,36 +226,6 @@ body.light-mode .theme-icon {
   filter: drop-shadow(0 0 5px var(--neon-purple));
 }
 
-/* Optimized floating particles */
-.particles-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-.particle {
-  position: absolute;
-  background: var(--neon-blue);
-  border-radius: 50%;
-  filter: blur(0.5px);
-  will-change: transform;
-  transform: translateZ(0);
-  transition: var(--theme-transition);
-  opacity: 0.12;
-}
-
-/* Light mode particle adjustments */
-body.light-mode .particle {
-  background: var(--neon-purple);
-  opacity: 0.3;
-}
-
 /* Simplified header */
 .header {
   text-align: center;
