@@ -5,16 +5,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load configuration from environment variables
-AZURE_OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY")
-AZURE_ENDPOINT = os.getenv("AZURE_ENDPOINT")
-AZURE_WEB_APP_NAME = os.getenv("AZURE_WEB_APP_NAME")
-AZURE_DEPLOYMENT_NAME = os.getenv("AZURE_DEPLOYMENT_NAME")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
 # Validate required environment variables
-if not AZURE_OPENAI_KEY:
-    raise ValueError("AZURE_OPENAI_KEY environment variable is required")
-if not AZURE_ENDPOINT:
-    raise ValueError("AZURE_ENDPOINT environment variable is required")
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is required")
+if not OPENAI_MODEL:
+    raise ValueError("OPENAI_MODEL environment variable is required")
 if not SERPAPI_KEY:
     raise ValueError("SERPAPI_KEY environment variable is required")

@@ -1,11 +1,7 @@
-from openai import AzureOpenAI
-from config import AZURE_OPENAI_KEY, AZURE_DEPLOYMENT_NAME, AZURE_ENDPOINT
+from openai import OpenAI
+from config import OPENAI_API_KEY, OPENAI_MODEL
 
-client = AzureOpenAI(
-    api_key=AZURE_OPENAI_KEY,
-    api_version="2023-07-01-preview",
-    azure_endpoint=AZURE_ENDPOINT
-)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 def summarize_articles(articles_dict):
     summaries = {}
@@ -15,7 +11,7 @@ def summarize_articles(articles_dict):
             continue
         prompt = f"Summarize the following text in 3 bullet points:\n{joined_articles}"
         response = client.chat.completions.create(
-            model=AZURE_DEPLOYMENT_NAME,
+            model=OPENAI_MODEL,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.7,
             max_tokens=250
