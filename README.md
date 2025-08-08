@@ -190,10 +190,8 @@ git push -u origin main
 
 | Variable | Description | Required | Example |
 |----------|-------------|----------|---------|
-| `AZURE_OPENAI_KEY` | Azure OpenAI API key | Yes | `sk-...` |
-| `AZURE_ENDPOINT` | Azure OpenAI endpoint URL | Yes | `https://...openai/deployments/...` |
-| `AZURE_WEB_APP_NAME` | Azure web app name | Yes | `my-app-name` |
-| `AZURE_DEPLOYMENT_NAME` | Azure deployment name | Yes | `gpt-4-deployment` |
+| `OPENAI_API_KEY` | OpenAI API key | Yes | `sk-...` |
+| `OPENAI_MODEL` | Azure deployment name | Yes | `pt-3.5-turbo` |
 | `SERPAPI_KEY` | SerpAPI key for news fetching | Yes | `your_serpapi_key` |
 
 ## Security Best Practices
@@ -237,6 +235,18 @@ Neural_News_Analyzer/
     ├── bias_analyzer.py
     └── generic_scraper.py
 ```
+
+
+## UI Screenshots
+
+### 1. **Homepage - Neural News Analyzer**
+![Homepage](./SS1.png)
+
+### 2. **News Summaries - CNN & Fox**
+![News Summaries](./SS2.png)
+
+### 3. **Bias Analysis Output**
+![Bias Analysis](./SS3.png)
 
 ## Troubleshooting
 
