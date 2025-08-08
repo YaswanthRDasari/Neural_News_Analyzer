@@ -1,11 +1,7 @@
-from openai import AzureOpenAI
-from config import AZURE_OPENAI_KEY, AZURE_DEPLOYMENT_NAME, AZURE_ENDPOINT
+from openai import OpenAI
+from config import OPENAI_API_KEY, OPENAI_MODEL
 
-client = AzureOpenAI(
-    api_key=AZURE_OPENAI_KEY,
-    api_version="2023-07-01-preview",
-    azure_endpoint=AZURE_ENDPOINT
-)
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 def analyze_bias(source_summaries):
     comparison_prompt = (
@@ -16,7 +12,7 @@ def analyze_bias(source_summaries):
         comparison_prompt += f"{source}:\n{summary}\n\n"
 
     response = client.chat.completions.create(
-        model=AZURE_DEPLOYMENT_NAME,
+        model=OPENAI_MODEL,
         messages=[{"role": "user", "content": comparison_prompt}],
         temperature=0.6,
         max_tokens=300
